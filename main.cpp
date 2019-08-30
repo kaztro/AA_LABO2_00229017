@@ -43,7 +43,6 @@ class Stack {
             Stack stack;
             if(sizeS == 0) return stack;
             Node *temp = start;
-
             if (!start) cout << "The Stack is empty" << endl;
             else {
                 while (temp) {
@@ -94,39 +93,32 @@ int fillS(int tamA, int aux, Stack stack) {
         stack.push(value);
         fillS(tamA, aux + 1, stack);
     } else {
-        stack.showStack();
+        Stack pair = stack.getPairs(tamA);
+        Stack odd = stack.getOdds(tamA);
+
+        cout << "Pair stack (contains: " << pair.size() << " elements): " << endl;
+        pair.showStack();
         cout << endl;
+        cout << "Odd stack (contains: " << odd.size() << " elements): " << endl;
+        odd.showStack();
+        cout << endl;
+        if (pair.size() == odd.size()) cout << "Both stacks are equals" << endl;
+        else {
+            (pair.size() > odd.size()) ? cout << "The pair stack is bigger" :
+            cout << "The odd stack is bigger";
+            cout << endl;
+        }
     }
 }
 
 int main() {
-    int length, sSize;
+    int length;
     Stack principal;
 
     cout << "How many numbers are you gonna enter?" << endl;
     cin >> length;
 
     fillS(length, 0, principal);
-
-    sSize = principal.size();
-
-    cout << sSize << endl;
-
-    Stack pair = principal.getPairs(sSize);
-    Stack odd = principal.getOdds(sSize);
-
-    cout << "Pair stack (contains: " << pair.size() << " elements): " << endl;
-    pair.showStack();
-    cout << endl;
-    cout << "Odd stack (contains: " << odd.size() << " elements): " << endl;
-    odd.showStack();
-    cout << endl;
-    if (pair.size() == odd.size()) cout << "Both stacks are equals" << endl;
-    else {
-        (pair.size() > odd.size()) ? cout << "The pair stack is bigger" :
-        cout << "The odd stack is bigger";
-        cout << endl;
-    }
 
     return 0;
 }
