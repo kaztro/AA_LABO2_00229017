@@ -7,28 +7,28 @@ struct PairNode {
     PairNode *next;
 }*pair_start;
 
+struct OddNode {
+    int value;
+    OddNode *next;
+}*odd_start;
+
+//Pila de pares
 class PairStack {
     public:
-        PairNode* createNode(int value) {
-            PairNode *n = new PairNode;
+        static PairNode* createNode(int value) {
+            auto *n = new PairNode;
             n -> value = value;
             n -> next = nullptr;
             return n;
         }
 
-        void push(int value) {
+        static void push(int value) {
             PairNode *n = createNode(value);
             n -> next = pair_start;
             pair_start = n;
         }
 
-        void pop() {
-            PairNode *temp = pair_start;
-            pair_start = pair_start -> next;
-            free(temp);
-        }
-
-        void showStack() {
+    static void showStack() {
             PairNode *temp = pair_start;
             if (!pair_start) cout << "The PairStack is empty" << endl;
             else
@@ -38,7 +38,7 @@ class PairStack {
                 }
         }
 
-        int size() {
+        static int size() {
             int sizeS = 0;
             PairNode *temp = pair_start;
             if (!pair_start) return 0;
@@ -55,33 +55,24 @@ class PairStack {
         }
 };
 
-struct OddNode {
-    int value;
-    OddNode *next;
-}*odd_start;
-
+//Pila de impares...
 class OddStack {
 public:
-    OddNode* createNode(int value) {
-        OddNode *n = new OddNode;
+    static OddNode* createNode(int value) {
+        auto *n = new OddNode;
         n -> value = value;
         n -> next = nullptr;
         return n;
     }
 
-    void push(int value) {
-        OddNode *n = createNode(value);
+    static void push(int value) {
+        OddNode *n;
+        n = createNode(value);
         n -> next = odd_start;
         odd_start = n;
     }
 
-    void pop() {
-        OddNode *temp = odd_start;
-        odd_start = odd_start -> next;
-        free(temp);
-    }
-
-    void showStack() {
+    static void showStack() {
         OddNode *temp = odd_start;
         if (!odd_start) cout << "The PairStack is empty" << endl;
         else
@@ -91,7 +82,7 @@ public:
             }
     }
 
-    int size() {
+    static int size() {
         int sizeS = 0;
         OddNode *temp = odd_start;
         if (!pair_start) return 0;
@@ -108,23 +99,24 @@ public:
     }
 };
 
+//Funcion que llena las pilasy hace la respectiva comparación
 int fillS(int tamA, int aux, PairStack pStack, OddStack oStack) {
     if (aux < tamA) {
         int value = 0;
         cout << "Enter the " << aux + 1 << " value of " << tamA << endl;
         cin >> value;
-        (value % 2 == 0) ? pStack.push(value) : oStack.push(value);
+        (value % 2 == 0) ? PairStack::push(value) : OddStack::push(value);
         fillS(tamA, aux + 1, pStack, oStack);
     } else {
-        cout << "Pair stack (contains: " << pStack.size() << " elements): " << endl;
-        pStack.showStack();
+        cout << "Pair stack (contains: " << PairStack::size() << " elements): " << endl;
+        PairStack::showStack();
         cout << endl;
-        cout << "Odd stack (contains: " << oStack.size() << " elements): " << endl;
-        oStack.showStack();
+        cout << "Odd stack (contains: " << OddStack::size() << " elements): " << endl;
+        OddStack::showStack();
         cout << endl;
-        if (pStack.size() == oStack.size()) cout << "Both stacks are equals" << endl;
+        if (PairStack::size() == OddStack::size()) cout << "Both stacks are equals" << endl;
         else {
-            (pStack.size() > oStack.size()) ? cout << "The pair stack is bigger" :
+            (PairStack::size() > OddStack::size()) ? cout << "The pair stack is bigger" :
             cout << "The odd stack is bigger";
             cout << endl;
         }
@@ -133,8 +125,8 @@ int fillS(int tamA, int aux, PairStack pStack, OddStack oStack) {
 
 int main() {
     int length;
-    PairStack pairS;
-    OddStack oddS;
+    PairStack pairS; //Pila pares
+    OddStack oddS; //Pila impares
 
     cout << "How many numbers are you gonna enter?" << endl;
     cin >> length;
