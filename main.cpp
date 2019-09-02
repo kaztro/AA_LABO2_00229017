@@ -2,35 +2,35 @@
 
 using namespace std;
 
-struct Node {
+struct PairNode {
     int value;
-    Node *next;
-}*start;
+    PairNode *next;
+}*pair_start;
 
-class Stack {
+class PairStack {
     public:
-        Node* createNode(int value) {
-            Node *n = new Node;
+        PairNode* createNode(int value) {
+            PairNode *n = new PairNode;
             n -> value = value;
             n -> next = nullptr;
             return n;
         }
 
         void push(int value) {
-            Node *n = createNode(value);
-            n -> next = start;
-            start = n;
+            PairNode *n = createNode(value);
+            n -> next = pair_start;
+            pair_start = n;
         }
 
         void pop() {
-            Node *temp = start;
-            start = start -> next;
+            PairNode *temp = pair_start;
+            pair_start = pair_start -> next;
             free(temp);
         }
 
         void showStack() {
-            Node *temp = start;
-            if (!start) cout << "The Stack is empty" << endl;
+            PairNode *temp = pair_start;
+            if (!pair_start) cout << "The PairStack is empty" << endl;
             else
                 while(temp) {
                     cout << temp -> value << ", ";
@@ -38,40 +38,10 @@ class Stack {
                 }
         }
 
-        //Discrima los pares y retorna un arreglo con los mismos...
-        Stack getPairs(int sizeS) {
-            Stack stack;
-            if(sizeS == 0) return stack;
-            Node *temp = start;
-            if (!start) cout << "The Stack is empty" << endl;
-            else {
-                while (temp) {
-                    if (temp->value % 2 == 0) stack.push(temp -> value);
-                    temp = temp -> next;
-                }
-            }
-            return stack;
-        }
-
-    //Discrima los impares y retorna un arreglo con los mismos...
-    Stack getOdds(int sizeS) {
-        Stack stack;
-        if(sizeS == 0) return stack;
-        Node *temp = start;
-        if (!start) cout << "The Stack is empty" << endl;
-        else {
-            while (temp) {
-                if (temp -> value % 2 != 0) stack.push(temp -> value);
-                temp = temp -> next;
-            }
-        }
-        return stack;
-    }
-
         int size() {
             int sizeS = 0;
-            Node *temp = start;
-            if (!start) return 0;
+            PairNode *temp = pair_start;
+            if (!pair_start) return 0;
             else {
                 while (temp) {
                     sizeS++;
@@ -80,31 +50,81 @@ class Stack {
             } return sizeS;
         }
 
-        Stack() {
-            start = nullptr;
+        PairStack() {
+            pair_start = nullptr;
         }
 };
 
-int fillS(int tamA, int aux, Stack stack) {
+struct OddNode {
+    int value;
+    OddNode *next;
+}*odd_start;
+
+class OddStack {
+public:
+    OddNode* createNode(int value) {
+        OddNode *n = new OddNode;
+        n -> value = value;
+        n -> next = nullptr;
+        return n;
+    }
+
+    void push(int value) {
+        OddNode *n = createNode(value);
+        n -> next = odd_start;
+        odd_start = n;
+    }
+
+    void pop() {
+        OddNode *temp = odd_start;
+        odd_start = odd_start -> next;
+        free(temp);
+    }
+
+    void showStack() {
+        OddNode *temp = odd_start;
+        if (!odd_start) cout << "The PairStack is empty" << endl;
+        else
+            while(temp) {
+                cout << temp -> value << ", ";
+                temp = temp -> next;
+            }
+    }
+
+    int size() {
+        int sizeS = 0;
+        OddNode *temp = odd_start;
+        if (!pair_start) return 0;
+        else {
+            while (temp) {
+                sizeS++;
+                temp = temp -> next;
+            }
+        } return sizeS;
+    }
+
+    OddStack() {
+        odd_start = nullptr;
+    }
+};
+
+int fillS(int tamA, int aux, PairStack pStack, OddStack oStack) {
     if (aux < tamA) {
         int value = 0;
         cout << "Enter the " << aux + 1 << " value of " << tamA << endl;
         cin >> value;
-        stack.push(value);
-        fillS(tamA, aux + 1, stack);
+        (value % 2 == 0) ? pStack.push(value) : oStack.push(value);
+        fillS(tamA, aux + 1, pStack, oStack);
     } else {
-        Stack pair = stack.getPairs(tamA);
-        Stack odd = stack.getOdds(tamA);
-
-        cout << "Pair stack (contains: " << pair.size() << " elements): " << endl;
-        pair.showStack();
+        cout << "Pair stack (contains: " << pStack.size() << " elements): " << endl;
+        pStack.showStack();
         cout << endl;
-        cout << "Odd stack (contains: " << odd.size() << " elements): " << endl;
-        odd.showStack();
+        cout << "Odd stack (contains: " << oStack.size() << " elements): " << endl;
+        oStack.showStack();
         cout << endl;
-        if (pair.size() == odd.size()) cout << "Both stacks are equals" << endl;
+        if (pStack.size() == oStack.size()) cout << "Both stacks are equals" << endl;
         else {
-            (pair.size() > odd.size()) ? cout << "The pair stack is bigger" :
+            (pStack.size() > oStack.size()) ? cout << "The pair stack is bigger" :
             cout << "The odd stack is bigger";
             cout << endl;
         }
@@ -113,12 +133,13 @@ int fillS(int tamA, int aux, Stack stack) {
 
 int main() {
     int length;
-    Stack principal;
+    PairStack pairS;
+    OddStack oddS;
 
     cout << "How many numbers are you gonna enter?" << endl;
     cin >> length;
 
-    fillS(length, 0, principal);
+    fillS(length, 0, pairS, oddS);
 
     return 0;
 }
